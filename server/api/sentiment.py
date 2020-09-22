@@ -1,9 +1,8 @@
 from server import app
 from flask import jsonify, request
 import torch
-import re
 from transformers import BertForSequenceClassification
-from .tokenization_kobert import KoBertTokenizer
+from server.api.tokenization_kobert import KoBertTokenizer
 from keras.preprocessing.sequence import pad_sequences
 import numpy as np
 import tensorflow as tf
