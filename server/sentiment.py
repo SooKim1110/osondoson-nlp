@@ -1,17 +1,18 @@
-from flask import Flask, jsonify, request
+from server import app
+from flask import jsonify, request
 import torch
 import re
 from transformers import BertForSequenceClassification
-from tokenization_kobert import KoBertTokenizer
+from .tokenization_kobert import KoBertTokenizer
 from keras.preprocessing.sequence import pad_sequences
 import numpy as np
 import tensorflow as tf
 
-app = Flask(__name__)
 
 tokenizer = KoBertTokenizer.from_pretrained('monologg/kobert')
-model = BertForSequenceClassification.from_pretrained('bert-emotion.h5')
+model = BertForSequenceClassification.from_pretrained('server/bert_emotion.h5')
 label_val = ['우울', '중립', '불안', '자살', '행복', '분노', '공포']
+
 def convert_input_data(sentences):
     # 토크나이저로 문장을 토큰으로 분리
     tokenized_texts = [tokenizer.tokenize(sent) for sent in sentences]
@@ -60,16 +61,13 @@ def test_sentences(sentences):
     logits = outputs[0]
     return logits
 
-@app.route('/')
-def hello():
-    return 'Hello World!'
 
-@app.route('/sentence', methods=['POST'])
-def analyze_sentiment_sentence():
-    sentence = request.form['sentence']
-    logits = test_sentences([sentence]).tolist()
-    logits = [float(x) for x in logits[0]]
-    return jsonify({'logits': logits, 'max_label': int(np.argmax(logits)), 'label': label_val[np.argmax(logits)]})
+# @app.route('/sentence', methods=['POST'])
+# def analyze_sentiment_sentence():
+#     sentence = request.form['sentence']
+#     logits = test_sentences([sentence]).tolist()
+#     logits = [float(x) for x in logits[0]]
+#     return jsonify({'logits': logits, 'max_label': int(np.argmax(logits)), 'label': label_val[np.argmax(logits)]})
 
 @app.route('/sentiment', methods=['POST'])
 def analyze_sentiment():
@@ -91,7 +89,6 @@ def analyze_sentiment():
         prob = tf.nn.softmax(logits)
         for i in range(7):
             prob_list[i] += float(prob[i])
-
         label_idx = int(np.argmax(logits))
         label_num_list[label_idx] += 1
         if label_idx == 3:
@@ -104,12 +101,12 @@ def analyze_sentiment():
         prob_list[i] /= len(sentences)
 
     gloom_idx = 100 * (float(prob[0] + prob[2] + prob[3]))
-    if gloom_idx > 70 and danger_sentences_num >= 1:
+    if gloom_idx > 60 and danger_sentences_num >= 1:
         danger_alarm = True
     else:
         danger_alarm = False
 
-    print(prob_list)
+
 
     return jsonify({'label_list': label_list,
                     'label_num_list': label_num_list,

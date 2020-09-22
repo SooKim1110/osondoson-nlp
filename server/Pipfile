@@ -18,6 +18,9 @@ onnxruntime = "*"
 keras = "*"
 tensorflow = "*"
 pandas = "*"
+matplotlib = "*"
+konlpy = "*"
+sklearn = "*"
 
 [requires]
 python_version = "3.8"
