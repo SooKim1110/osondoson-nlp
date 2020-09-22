@@ -5,6 +5,7 @@ from collections import Counter, defaultdict
 from scipy.sparse import csr_matrix
 import numpy as np
 from sklearn.preprocessing import normalize
+import math
 import re
 
 #코드 출처: https://lovit.github.io/nlp/2019/04/30/textrank/
@@ -74,10 +75,43 @@ def komoran_tokenize(sent):
     words = [w for w in words if ('/NN' in w or '/XR' in w or '/VA' in w or '/VV' in w)]
     return words
 
+def sent_graph(sents, tokenize, similarity, min_count = 2, min_sim = 0.3):
+    _, vocab_to_idx = scan_vocab(sents,tokenize, min_count)
+    tokens = [[w for w in tokenize(sent) if w in vocab_to_idx] for sent in sents]
+    rows, cols, data = [], [], []
+    n_sents = len(tokens)
+    for i, tokens_i in enumerate(tokens):
+        for j, tokens_j in enumerate(tokens):
+            if i >= j:
+                continue
+            sim = similarity(tokens_i, tokens_j)
+            if sim < min_sim:
+                continue
+            rows.append(i)
+            cols.append(j)
+            data.append(sim)
+    return csr_matrix((data, (rows, cols)), shape = (n_sents, n_sents))
+
+def textrank_sent_sim(s1,s2):
+    n1 = len(s1)
+    n2 = len(s2)
+    if (n1 <= 1) or (n2 <= 1):
+        return 0
+    common = len(set(s1).intersection(set(s2)))
+    base = math.log(n1) + math.log(n2)
+    return common / base
+
+def textrank_keysentence(sents, tokenize, min_count,min_sim, similarity, df = 0.85, max_iter = 30, topk = 3):
+    g = sent_graph(sents, tokenize, textrank_sent_sim, min_count, min_sim)
+    R = pagerank(g, df, max_iter).reshape(-1)
+    idxs = R.argsort()[-topk:]
+    keysents = [(idx, R[idx],sents[idx]) for idx in reversed(idxs)]
+    return keysents
 
 @app.route('/summary', methods=['POST'])
 def summary():
     text = request.form['text']
+    sents = text.split('.')
 
     #키워드 추출
     if len(text) < 300:
@@ -92,25 +126,28 @@ def summary():
 
         count = Counter(words)
         keywords = count.most_common(10)
-        frequent_words = []
+        main_words = []
         for word in keywords:
             if (word[1] >= 2):
-                frequent_words.append(word[0])
+                main_words.append(word[0])
 
     else:
-        # 키워드 방식 2) TextRank 기반 키워드 추출 - 긴 고민에 적합 (분석 시간이 오래걸림)
-        sents = text.split('.')
+        # 키워드 방식 2) TextRank 기반 키워드 추출 - 긴 고민에 적합
         keywords = textrank_keyword(sents, komoran_tokenize, 2, 2, 2, 0.85, 30, 10)
-        frequent_words = []
+        main_words = []
         for i, word in enumerate(keywords):
             if i > 10:
                 break
             if word[1] >= 0.3:
-                frequent_words.append(word[0].split('/')[0])
+                main_words.append(word[0].split('/')[0])
 
     # 주요 문장 추출
+    summarizer = textrank_keysentence(sents, komoran_tokenize,2,0.4,textrank_sent_sim)
+    print(summarizer)
+
     main_sentences = []
+    for i in range(3):
+        main_sentences.append(summarizer[i][2])
 
-
-    return jsonify({'frequent_words': frequent_words, 'main_sentences': main_sentences})
+    return jsonify({'main_words': main_words, 'main_sentences': main_sentences})
 
