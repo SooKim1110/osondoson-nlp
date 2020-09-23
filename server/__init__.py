@@ -8,4 +8,3 @@ app = Flask(__name__)
 import server.api.sentiment
 import server.api.summary
 import server.api.voice
-import server.api.emergency
