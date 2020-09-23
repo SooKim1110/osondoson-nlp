@@ -2,7 +2,7 @@ from server import app
 from flask import jsonify, request
 import torch
 from transformers import BertForSequenceClassification
-from server.api.tokenization_kobert import KoBertTokenizer
+from server.lib.tokenization_kobert import KoBertTokenizer
 from keras.preprocessing.sequence import pad_sequences
 import numpy as np
 import tensorflow as tf
@@ -70,18 +70,16 @@ def test_sentences(sentences):
 
 @app.route('/sentiment', methods=['POST'])
 def analyze_sentiment():
-    #여러 문장
+    #여러 문장 분류
     prob_list = [0 for i in range(7)]
-    label_list = []
     label_num_list = [0 for i in range(7)]
-    gloom_idx = 0
     danger_sentences = []
-    danger_sentences_num = 0
 
-
-    sentences = request.form['sentences'].split('.')
+    ############# 감정 분석 #############
+    sentences = request.form['text'].split('.')
     del sentences[-1]
 
+    # 문장별 감정 태깅
     for sentence in sentences:
         logits = test_sentences([sentence]).tolist()
         logits = [float(x) for x in logits[0]]
@@ -92,27 +90,45 @@ def analyze_sentiment():
         label_num_list[label_idx] += 1
         if label_idx == 3:
             danger_sentences.append(sentence)
-            danger_sentences_num += 1
-        label_list.append(label_val[label_idx])
 
+    # 감정 파이차트
+    total_num = len(sentences)
+    pos = (label_num_list[4]/total_num) * 100
+    neg = (label_num_list[1]/total_num) * 100
+    neu = 100 - pos - neg
+    pie_chart = [pos, neu, neg]
 
     for i in range(7):
         prob_list[i] /= len(sentences)
 
-    gloom_idx = 100 * (float(prob[0] + prob[2] + prob[3]))
-    if gloom_idx > 60 and danger_sentences_num >= 1:
-        danger_alarm = True
+    ############# 응급 상황 분석 #############
+
+    # 우울 지수 - 우울, 불안, 자살 항목 확률 합
+    gloom_score = 100 * (float(prob[0] + prob[2] + prob[3]))
+
+    # 위험 여부 - 우울지수와, 자살 항목 문잘 표현 횟수로 결정
+    if gloom_score > 85 and len(danger_sentences) >= 3:
+        danger_alarm = '긴급'
+    elif gloom_score > 60 and len(danger_sentences) >= 2:
+        danger_alarm = '위험'
+    elif gloom_score > 50 and len(danger_sentences) >= 1:
+        danger_alarm = '주의',
+    elif gloom_score > 40:
+        danger_alarm = '보통',
     else:
-        danger_alarm = False
+        danger_alarm = '안정'
 
 
-
-    return jsonify({'label_list': label_list,
-                    'label_num_list': label_num_list,
-                    'danger_alarm': danger_alarm,
-                    'gloom_idx': gloom_idx,
-                    'danger_sentences': danger_sentences,
-                    'danger_sentences_num': danger_sentences_num
-                    })
+    return jsonify({
+        'label_key': label_val,
+        'sentiment': {'radar_chart': label_num_list,
+                      'pie_chart': pie_chart
+        },
+        'emergency': {
+            'gloom_score': gloom_score,
+            'danger_sentences': danger_sentences,
+            'danger_alarm': danger_alarm,
+        }
+    })
 
 

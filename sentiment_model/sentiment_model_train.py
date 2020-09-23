@@ -14,7 +14,7 @@ import torch
 
 from transformers import BertForSequenceClassification, AdamW
 from transformers import get_linear_schedule_with_warmup
-from server.api.tokenization_kobert import KoBertTokenizer
+from server.lib.tokenization_kobert import KoBertTokenizer
 from torch.utils.data import TensorDataset, DataLoader, RandomSampler, SequentialSampler
 from keras.preprocessing.sequence import pad_sequences
 from sklearn.model_selection import train_test_split

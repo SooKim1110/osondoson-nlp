@@ -109,9 +109,10 @@ def textrank_keysentence(sents, tokenize, min_count,min_sim, similarity, df = 0.
     return keysents
 
 @app.route('/summary', methods=['POST'])
-def summary():
-    text = request.form['text']
+def analyze_summary():
+    text = request.form['text'].strip()
     sents = text.split('.')
+    del sents[-1]
 
     #키워드 추출
     if len(text) < 300:
@@ -133,7 +134,7 @@ def summary():
 
     else:
         # 키워드 방식 2) TextRank 기반 키워드 추출 - 긴 고민에 적합
-        keywords = textrank_keyword(sents, komoran_tokenize, 2, 2, 2, 0.85, 30, 10)
+        keywords = textrank_keyword(sents, komoran_tokenize, 2, 2, 2, 0.85, 20, 10)
         main_words = []
         for i, word in enumerate(keywords):
             if i > 10:
@@ -142,11 +143,10 @@ def summary():
                 main_words.append(word[0].split('/')[0])
 
     # 주요 문장 추출
-    summarizer = textrank_keysentence(sents, komoran_tokenize,2,0.4,textrank_sent_sim)
-    print(summarizer)
+    summarizer = textrank_keysentence(sents, komoran_tokenize,2,0.4,textrank_sent_sim,0.85,20,3)
 
     main_sentences = []
-    for i in range(3):
+    for i in range(min(3,len(summarizer))):
         main_sentences.append(summarizer[i][2])
 
     return jsonify({'main_words': main_words, 'main_sentences': main_sentences})
