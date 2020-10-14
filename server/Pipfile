@@ -21,6 +21,7 @@ pandas = "*"
 matplotlib = "*"
 konlpy = "*"
 sklearn = "*"
+pymysql = "*"
 
 [requires]
 python_version = "3.8"

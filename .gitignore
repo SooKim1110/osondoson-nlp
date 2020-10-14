@@ -2,3 +2,4 @@
 __pycache__/
 .DS_Store
 server/bert_emotion.h5/
+server/module/

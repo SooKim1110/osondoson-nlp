@@ -1,12 +1,14 @@
 from server import app
 from flask import jsonify, request
+import json
 import torch
+import re
 from transformers import BertForSequenceClassification
 from server.lib.tokenization_kobert import KoBertTokenizer
 from keras.preprocessing.sequence import pad_sequences
 import numpy as np
 import tensorflow as tf
-
+from server.module import dbModule
 
 tokenizer = KoBertTokenizer.from_pretrained('monologg/kobert')
 model = BertForSequenceClassification.from_pretrained('server/bert_emotion.h5')
@@ -90,45 +92,58 @@ def analyze_sentiment():
         label_num_list[label_idx] += 1
         if label_idx == 3:
             danger_sentences.append(sentence)
+        # print(sentence + '[' + label_val[label_idx] + ']')
 
     # 감정 파이차트
     total_num = len(sentences)
     pos = (label_num_list[4]/total_num) * 100
-    neg = (label_num_list[1]/total_num) * 100
-    neu = 100 - pos - neg
-    pie_chart = [pos, neu, neg]
+    neu = (label_num_list[1]/total_num) * 100
+    neg = 100 - pos - neu
+    pie_chart = [pos, neu, neg, total_num]
+
+    ############# 응급 상황 분석 #############
 
     for i in range(7):
         prob_list[i] /= len(sentences)
 
-    ############# 응급 상황 분석 #############
-
     # 우울 지수 - 우울, 불안, 자살 항목 확률 합
-    gloom_score = 100 * (float(prob[0] + prob[2] + prob[3]))
+    gloom_score = 100 * (float(prob_list[0] + prob_list[2] + prob_list[3]))
 
     # 위험 여부 - 우울지수와, 자살 항목 문잘 표현 횟수로 결정
+    danger_alarm = ""
     if gloom_score > 85 and len(danger_sentences) >= 3:
-        danger_alarm = '긴급'
+        danger_alarm = "긴급"
     elif gloom_score > 60 and len(danger_sentences) >= 2:
-        danger_alarm = '위험'
+        danger_alarm = "위험"
     elif gloom_score > 50 and len(danger_sentences) >= 1:
-        danger_alarm = '주의',
+        danger_alarm = "주의"
     elif gloom_score > 40:
-        danger_alarm = '보통',
+        danger_alarm = "보통"
     else:
-        danger_alarm = '안정'
+        danger_alarm = "안정"
 
+    emergency = {
+            "gloom_score": gloom_score,
+            "danger_sentences": danger_sentences,
+            "danger_alarm": danger_alarm
+    }
+    emergency = str(emergency).replace("'", '"')
 
-    return jsonify({
-        'label_key': label_val,
-        'sentiment': {'radar_chart': label_num_list,
-                      'pie_chart': pie_chart
-        },
-        'emergency': {
-            'gloom_score': gloom_score,
-            'danger_sentences': danger_sentences,
-            'danger_alarm': danger_alarm,
-        }
-    })
+    sentiment = {
+        "radar_chart": label_num_list,
+        "pie_chart": pie_chart
+    }
+    sentiment = str(sentiment).replace("'",'"')
+
+    counsel_id = request.form['counsel_id']
+    db_class = dbModule.Database()
+
+    sql = "INSERT INTO sys.db_counseling_analysis(counseling_id_id, emergency, sentiment) \
+          VALUES('%s','%s','%s') ON DUPLICATE KEY UPDATE emergency ='%s', sentiment = '%s' " \
+          % (counsel_id, emergency, sentiment, emergency, sentiment)
+    db_class.execute(sql)
+    db_class.commit()
+
+    return jsonify(emergency,sentiment), 201
 
 

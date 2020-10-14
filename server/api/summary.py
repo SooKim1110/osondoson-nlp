@@ -6,6 +6,7 @@ from scipy.sparse import csr_matrix
 import numpy as np
 from sklearn.preprocessing import normalize
 import math
+from server.module import dbModule
 import re
 
 #코드 출처: https://lovit.github.io/nlp/2019/04/30/textrank/
@@ -149,5 +150,25 @@ def analyze_summary():
     for i in range(min(3,len(summarizer))):
         main_sentences.append(summarizer[i][2])
 
-    return jsonify({'main_words': main_words, 'main_sentences': main_sentences})
+    main_words = {
+        "main_words": main_words
+    }
+    main_words = str(main_words).replace("'", '"')
+
+    main_sentences = {
+        "main_sentences": main_sentences
+    }
+    main_sentences = str(main_sentences).replace("'", '"')
+
+    counsel_id = request.form['counsel_id']
+    db_class = dbModule.Database()
+
+    sql = "INSERT INTO sys.db_counseling_analysis(counseling_id_id, main_words, main_sentences) \
+          VALUES('%s','%s','%s') ON DUPLICATE KEY UPDATE main_words ='%s', main_sentences = '%s' " \
+          % (counsel_id, main_words, main_sentences, main_words, main_sentences)
+    db_class.execute(sql)
+    db_class.commit()
+
+    return jsonify(main_words,main_sentences), 201
+
 
