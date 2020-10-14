@@ -3,16 +3,15 @@ from flask import jsonify, request
 import json
 import torch
 import re
-from transformers import BertForSequenceClassification
-from server.lib.tokenization_kobert import KoBertTokenizer
+from transformers import BertForSequenceClassification, AutoTokenizer
 from keras.preprocessing.sequence import pad_sequences
 import numpy as np
 import tensorflow as tf
 from server.module import dbModule
 
-tokenizer = KoBertTokenizer.from_pretrained('monologg/kobert')
+tokenizer = AutoTokenizer.from_pretrained('beomi/kcbert-base')
 model = BertForSequenceClassification.from_pretrained('server/bert_emotion.h5')
-label_val = ['우울', '중립', '불안', '자살', '행복', '분노', '공포']
+label_val = ['우울', '중립', '불안', '공포', '분노', '자살', '행복']
 
 def convert_input_data(sentences):
     # 토크나이저로 문장을 토큰으로 분리
@@ -81,6 +80,7 @@ def analyze_sentiment():
     sentences = request.form['text'].split('.')
     del sentences[-1]
 
+    label = []
     # 문장별 감정 태깅
     for sentence in sentences:
         logits = test_sentences([sentence]).tolist()
@@ -89,14 +89,17 @@ def analyze_sentiment():
         for i in range(7):
             prob_list[i] += float(prob[i])
         label_idx = int(np.argmax(logits))
+        label.append(label_val[label_idx])
         label_num_list[label_idx] += 1
-        if label_idx == 3:
+        if label_idx == 5:
             danger_sentences.append(sentence)
-        # print(sentence + '[' + label_val[label_idx] + ']')
+        #print(sentence + '[' + label_val[label_idx] + ']')
+
+    # print(label)
 
     # 감정 파이차트
     total_num = len(sentences)
-    pos = (label_num_list[4]/total_num) * 100
+    pos = (label_num_list[6]/total_num) * 100
     neu = (label_num_list[1]/total_num) * 100
     neg = 100 - pos - neu
     pie_chart = [pos, neu, neg, total_num]
@@ -107,7 +110,7 @@ def analyze_sentiment():
         prob_list[i] /= len(sentences)
 
     # 우울 지수 - 우울, 불안, 자살 항목 확률 합
-    gloom_score = 100 * (float(prob_list[0] + prob_list[2] + prob_list[3]))
+    gloom_score = 100 * (float(prob_list[0] + prob_list[2] + prob_list[5]))
 
     # 위험 여부 - 우울지수와, 자살 항목 문잘 표현 횟수로 결정
     danger_alarm = ""
