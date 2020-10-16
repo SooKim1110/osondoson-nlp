@@ -144,8 +144,11 @@ def analyze_sentiment():
     sql = "INSERT INTO sys.db_counseling_analysis(counseling_id_id, emergency, sentiment) \
           VALUES('%s','%s','%s') ON DUPLICATE KEY UPDATE emergency ='%s', sentiment = '%s' " \
           % (counsel_id, emergency, sentiment, emergency, sentiment)
-    db_class.execute(sql)
-    db_class.commit()
+    try:
+        db_class.execute(sql)
+        db_class.commit()
+    finally:
+        db_class.close()
 
     return jsonify(emergency,sentiment), 201
 

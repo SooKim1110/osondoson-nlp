@@ -166,8 +166,11 @@ def analyze_summary():
     sql = "INSERT INTO sys.db_counseling_analysis(counseling_id_id, main_words, main_sentences) \
           VALUES('%s','%s','%s') ON DUPLICATE KEY UPDATE main_words ='%s', main_sentences = '%s' " \
           % (counsel_id, main_words, main_sentences, main_words, main_sentences)
-    db_class.execute(sql)
-    db_class.commit()
+    try:
+        db_class.execute(sql)
+        db_class.commit()
+    finally:
+        db_class.close()
 
     return jsonify(main_words,main_sentences), 201
 
