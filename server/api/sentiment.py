@@ -8,6 +8,7 @@ from keras.preprocessing.sequence import pad_sequences
 import numpy as np
 import tensorflow as tf
 from server.module import dbModule
+from pymysql.err import IntegrityError
 
 tokenizer = AutoTokenizer.from_pretrained('beomi/kcbert-base')
 model = BertForSequenceClassification.from_pretrained('server/bert_emotion.h5')
@@ -147,6 +148,8 @@ def analyze_sentiment():
     try:
         db_class.execute(sql)
         db_class.commit()
+    except IntegrityError as ex:
+        return jsonify(emergency,sentiment,{'ERROR': str(ex)}), 409
     finally:
         db_class.close()
 

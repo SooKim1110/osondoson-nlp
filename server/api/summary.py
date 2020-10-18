@@ -7,6 +7,7 @@ import numpy as np
 from sklearn.preprocessing import normalize
 import math
 from server.module import dbModule
+from pymysql.err import IntegrityError
 import re
 
 #코드 출처: https://lovit.github.io/nlp/2019/04/30/textrank/
@@ -169,6 +170,8 @@ def analyze_summary():
     try:
         db_class.execute(sql)
         db_class.commit()
+    except IntegrityError as ex:
+        return jsonify(main_words, main_sentences, {'ERROR': str(ex)}), 409
     finally:
         db_class.close()
 
