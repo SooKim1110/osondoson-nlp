@@ -113,7 +113,7 @@ def textrank_keysentence(sents, tokenize, min_count,min_sim, similarity, df = 0.
 @app.route('/summary', methods=['POST'])
 def analyze_summary():
     text = request.form['text'].strip()
-    sents = text.split('.')
+    sents = re.split('(?<=[\.\?\!])\s*', text)
     del sents[-1]
 
     #키워드 추출

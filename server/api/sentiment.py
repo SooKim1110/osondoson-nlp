@@ -78,7 +78,8 @@ def analyze_sentiment():
     danger_sentences = []
 
     ############# 감정 분석 #############
-    sentences = request.form['text'].split('.')
+    text = request.form['text'].strip()
+    sentences = re.split('(?<=[\.\?\!])\s*', text)
     del sentences[-1]
 
     label = []
