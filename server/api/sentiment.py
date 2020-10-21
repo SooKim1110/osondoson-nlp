@@ -81,6 +81,11 @@ def analyze_sentiment():
     text = request.form['text'].strip()
     sentences = re.split('(?<=[\.\?\!])\s*', text)
     del sentences[-1]
+    print(sentences)
+
+    # text가 빈 경우 예외 처리
+    if len(sentences) == 0:
+        return jsonify({'ERROR': "text is empty"}), 400
 
     label = []
     # 문장별 감정 태깅
@@ -112,17 +117,18 @@ def analyze_sentiment():
         prob_list[i] /= len(sentences)
 
     # 우울 지수 - 우울, 불안, 자살 항목 확률 합
-    gloom_score = 100 * (float(prob_list[0] + prob_list[2] + prob_list[5]))
+    gloom_score = 100 * (float(prob_list[0]*0.8 + prob_list[2]*0.7 + prob_list[5]*1.5))
+    gloom_score = round(gloom_score, 2)
 
-    # 위험 여부 - 우울지수와, 자살 항목 문잘 표현 횟수로 결정
+    # 위험 여부 - 우울지수와 자살 항목 문잘 표현 횟수로 결정
     danger_alarm = ""
     if gloom_score > 85 and len(danger_sentences) >= 3:
         danger_alarm = "긴급"
-    elif gloom_score > 60 and len(danger_sentences) >= 2:
+    elif gloom_score > 70 and len(danger_sentences) >= 2:
         danger_alarm = "위험"
-    elif gloom_score > 50 and len(danger_sentences) >= 1:
+    elif gloom_score > 60 and len(danger_sentences) >= 1:
         danger_alarm = "주의"
-    elif gloom_score > 40:
+    elif gloom_score > 50:
         danger_alarm = "보통"
     else:
         danger_alarm = "안정"
@@ -150,7 +156,7 @@ def analyze_sentiment():
         db_class.execute(sql)
         db_class.commit()
     except IntegrityError as ex:
-        return jsonify(emergency,sentiment,{'ERROR': str(ex)}), 409
+        return jsonify(str(sentences), emergency,sentiment,{'ERROR': str(ex)}), 409
     finally:
         db_class.close()
 

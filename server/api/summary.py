@@ -116,6 +116,10 @@ def analyze_summary():
     sents = re.split('(?<=[\.\?\!])\s*', text)
     del sents[-1]
 
+    # text가 빈 경우 예외 처리
+    if len(sents) == 0:
+        return jsonify({'ERROR': "text is empty"}), 400
+
     #키워드 추출
     if len(text) < 300:
         # 키워드 방식 1) 형태소 분석 후 최다 빈도 단어 추출 - 짧은 고민에 적합
