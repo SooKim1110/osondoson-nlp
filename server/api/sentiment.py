@@ -76,18 +76,17 @@ def analyze_sentiment():
     prob_list = [0 for i in range(7)]
     label_num_list = [0 for i in range(7)]
     danger_sentences = []
+    label = []
 
     ############# 감정 분석 #############
     text = request.form['text'].strip()
     sentences = re.split('(?<=[\.\?\!])\s*', text)
     del sentences[-1]
-    print(sentences)
 
     # text가 빈 경우 예외 처리
     if len(sentences) == 0:
         return jsonify({'ERROR': "text is empty"}), 400
 
-    label = []
     # 문장별 감정 태깅
     for sentence in sentences:
         logits = test_sentences([sentence]).tolist()
@@ -100,9 +99,9 @@ def analyze_sentiment():
         label_num_list[label_idx] += 1
         if label_idx == 5:
             danger_sentences.append(sentence)
-        #print(sentence + '[' + label_val[label_idx] + ']')
 
-    # print(label)
+    # 결과 콘솔 확인용 코드
+    print(list(zip(sentences,label)))
 
     # 감정 파이차트
     total_num = len(sentences)
@@ -142,7 +141,8 @@ def analyze_sentiment():
 
     sentiment = {
         "radar_chart": label_num_list,
-        "pie_chart": pie_chart
+        "pie_chart": pie_chart,
+        "trend_line": label
     }
     sentiment = str(sentiment).replace("'",'"')
 
@@ -156,7 +156,7 @@ def analyze_sentiment():
         db_class.execute(sql)
         db_class.commit()
     except IntegrityError as ex:
-        return jsonify(str(sentences), emergency,sentiment,{'ERROR': str(ex)}), 409
+        return jsonify(emergency,sentiment,{'ERROR': str(ex)}), 409
     finally:
         db_class.close()
 
