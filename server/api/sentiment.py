@@ -85,6 +85,34 @@ def analyze_sentiment():
 
     # text가 빈 경우 예외 처리
     if len(sentences) == 0:
+
+        # 11월 1일 추가
+        emergency = {
+                "gloom_score": 0,
+                "danger_sentences": "안정",
+                "danger_alarm": []
+        }
+        emergency = str(emergency).replace("'", '"')
+        sentiment = {
+            "radar_chart": [0,0,0,0,0,0],
+            "pie_chart": [0.0, 0.0, 0.0, 0.0],
+            "trend_line": ["중립"]
+        }
+        sentiment = str(sentiment).replace("'",'"')
+
+        counsel_id = request.form['counsel_id']
+        db_class = dbModule.Database()
+
+        sql = "INSERT INTO sys.db_counseling_analysis(counseling_id_id, emergency, sentiment) \
+            VALUES('%s','%s','%s') ON DUPLICATE KEY UPDATE emergency ='%s', sentiment = '%s' " \
+            % (counsel_id, emergency, sentiment, emergency, sentiment)
+        try:
+            db_class.execute(sql)
+            db_class.commit()
+        except IntegrityError as ex:
+            return jsonify(emergency,sentiment,{'ERROR': str(ex)}), 409
+        finally:
+            db_class.close()
         return jsonify({'ERROR': "text is empty"}), 400
 
     # 문장별 감정 태깅
