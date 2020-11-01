@@ -1,0 +1,162 @@
+version: "2.0"
+
+stories:
+- story: 인사
+  steps:
+    - intent: 인사
+    - action: utter_인사
+
+#- story: 학교폭력_카테고리질문
+#  steps:
+#  - intent: 학교폭력
+#  - action: utter_카테고리질문
+- story: 감사
+  steps:
+    - intent: 감사
+    - action: utter_감사답변
+
+- story: 카테고리질문
+  steps:
+    - intent: 질문
+    - action: utter_카테고리질문
+
+- story: 학교폭력_기관
+  steps:
+  - intent: 학교폭력_기관
+  - action: utter_학교폭력_기관
+
+- story: 학교폭력_추천답변
+  steps:
+  - intent: 학교폭력_추천답변
+  - action: utter_학교폭력_추천답변
+
+#- story: 사이버학교폭력_카테고리질문
+#  steps:
+#  - intent: 사이버학교폭력
+#  - action: utter_카테고리질문
+
+- story: 사이버학교폭력_기관
+  steps:
+  - intent: 사이버학교폭력_기관
+  - action: utter_사이버학교폭력_기관
+
+- story: 사이버학교폭력_추천답변
+  steps:
+  - intent: 사이버학교폭력_추천답변
+  - action: utter_사이버학교폭력_추천답변
+
+#- story: 학교폭력목격_카테고리질문
+#  steps:
+#  - intent: 학교폭력목격
+#  - action: utter_카테고리질문
+
+- story: 학교폭력목격_콘텐츠
+  steps:
+  - intent: 학교폭력목격_콘텐츠
+  - action: utter_학교폭력_기관
+
+- story: 학교폭력목격_추천답변
+  steps:
+  - intent: 학교폭력목격_추천답변
+  - action: utter_학교폭력목격_추천답변
+#
+#- story: 가정폭력_카테고리질문
+#  steps:
+#  - intent: 가정폭력
+#  - action: utter_카테고리질문
+
+- story: 가정폭력_기관
+  steps:
+  - intent: 가정폭력_기관
+  - action: utter_가정폭력_기관
+
+- story: 가정폭력_추천답변
+  steps:
+  - intent: 가정폭력_추천답변
+  - action: utter_가정폭력_추천답변
+
+- story: 가정폭력성학대_추천답변
+  steps:
+  - intent: 가정폭력성학대_추천답변
+  - action: utter_가정폭력성학대_추천답변
+
+#- story: 자살_카테고리질문
+#  steps:
+#  - intent: 자살
+#  - action: utter_카테고리질문
+
+- story: 자살_기관
+  steps:
+  - intent: 자살_기관
+  - action: utter_자살_기관
+
+- story: 자살_추천답변
+  steps:
+  - intent: 자살_추천답변
+  - action: utter_자살_추천답변
+
+#- story: 자해_카테고리질문
+#  steps:
+#  - intent: 자해
+#  - action: utter_카테고리질문
+
+- story: 자해_기관
+  steps:
+  - intent: 자해_기관
+  - action: utter_자해_기관
+
+- story: 자해_추천답변
+  steps:
+  - intent: 자해_추천답변
+  - action: utter_자해_추천답변
+
+- story: 성_기관
+  steps:
+  - intent: 성_기관
+  - action: utter_성_기관
+
+- story: 가출_기관
+  steps:
+  - intent: 가출_기관
+  - action: utter_가출_기관
+
+- story: 가출_추천답변
+  steps:
+  - intent: 가출_추천답변
+  - action: utter_가출_추천답변
+
+- story: 대인관계_기관
+  steps:
+  - intent: 대인관계_기관
+  - action: utter_대인관계_기관
+
+- story: 진로_기관
+  steps:
+  - intent: 진로_기관
+  - action: utter_진로_기관
+
+- story: 인터넷중독_기관
+  steps:
+  - intent: 인터넷중독_기관
+  - action: utter_인터넷중독_기관
+
+- story: 성격_기관
+  steps:
+  - intent: 성격_기관
+  - action: utter_성격_기관
+
+- story: 정신건강_기관
+  steps:
+  - intent: 정신건강_기관
+  - action: utter_정신건강_기관
+
+- story: 가정문제_기관
+  steps:
+  - intent: 가정문제_기관
+  - action: utter_가정문제_기관
+
+- story: 근로문제_기관
+  steps:
+  - intent: 근로문제_기관
+  - action: utter_근로문제_기관
+  
