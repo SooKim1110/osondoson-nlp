@@ -131,8 +131,8 @@ def analyze_summary():
         main_sentences = str(main_sentences).replace("'", '"')
 
         sql1 = "INSERT INTO sys.db_counseling_analysis(counseling_id_id, main_words, main_sentences) \
-                VALUES('%s','%s','%s') ON DUPLICATE KEY UPDATE main_sentences = '%s' " \
-              % (counsel_id,main_words,main_sentences, main_sentences)
+                VALUES('%s','%s','%s') ON DUPLICATE KEY UPDATE main_words = '%s', main_sentences = '%s' " \
+              % (counsel_id,main_words,main_sentences,main_words, main_sentences)
         sql2 = "UPDATE sys.db_counseling SET analysis_complete = 1 \
                 WHERE counseling_id = '%s'" \
                 % (counsel_id)

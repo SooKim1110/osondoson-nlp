@@ -89,7 +89,7 @@ def analyze_sentiment():
         # 11월 1일 추가
         emergency = {
                 "gloom_score": 0,
-                "danger_sentences": "안정",
+                "danger_sentences": ["안정"],
                 "danger_alarm": []
         }
         emergency = str(emergency).replace("'", '"')
