@@ -112,12 +112,31 @@ def textrank_keysentence(sents, tokenize, min_count,min_sim, similarity, df = 0.
 
 @app.route('/summary', methods=['POST'])
 def analyze_summary():
+    counsel_id = request.form['counsel_id']
     text = request.form['text'].strip()
     sents = re.split('(?<=[\.\?\!])\s*', text)
     del sents[-1]
 
     # text가 빈 경우 예외 처리
     if len(sents) == 0:
+        db_class = dbModule.Database()
+
+        main_sentences = {
+            "main_sentences": "인식된 상담 텍스트가 없습니다."
+        }
+        main_sentences = str(main_sentences).replace("'", '"')
+
+        sql = "INSERT INTO sys.db_counseling_analysis(counseling_id_id, main_sentences) \
+                   VALUES('%s','%s') ON DUPLICATE KEY UPDATE main_sentences = '%s' " \
+              % (counsel_id, main_sentences, main_sentences)
+
+        try:
+            db_class.execute(sql)
+            db_class.commit()
+        except IntegrityError as ex:
+            return jsonify(main_sentences, {'ERROR': str(ex)}), 409
+        finally:
+            db_class.close()
         return jsonify({'ERROR': "text is empty"}), 400
 
     #키워드 추출
@@ -165,14 +184,17 @@ def analyze_summary():
     }
     main_sentences = str(main_sentences).replace("'", '"')
 
-    counsel_id = request.form['counsel_id']
     db_class = dbModule.Database()
 
     sql = "INSERT INTO sys.db_counseling_analysis(counseling_id_id, main_words, main_sentences) \
-          VALUES('%s','%s','%s') ON DUPLICATE KEY UPDATE main_words ='%s', main_sentences = '%s' " \
+           VALUES('%s','%s','%s') ON DUPLICATE KEY UPDATE main_words ='%s', main_sentences = '%s' " \
           % (counsel_id, main_words, main_sentences, main_words, main_sentences)
+    sql2 = "UPDATE sys.db_counseling SET analysis_complete = 1 \
+            WHERE counseling_id = '%s'" \
+          % (counsel_id)
     try:
         db_class.execute(sql)
+        db_class.execute(sql2)
         db_class.commit()
     except IntegrityError as ex:
         return jsonify(main_words, main_sentences, {'ERROR': str(ex)}), 409

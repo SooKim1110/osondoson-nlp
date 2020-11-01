@@ -139,6 +139,9 @@ def analyze_sentiment():
     }
     emergency = str(emergency).replace("'", '"')
 
+    #'중립' 레이블 삭제하기
+    del label_num_list[1]
+
     sentiment = {
         "radar_chart": label_num_list,
         "pie_chart": pie_chart,
