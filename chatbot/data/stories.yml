@@ -6,14 +6,20 @@ stories:
     - intent: 인사
     - action: utter_인사
 
-#- story: 학교폭력_카테고리질문
-#  steps:
-#  - intent: 학교폭력
-#  - action: utter_카테고리질문
 - story: 감사
   steps:
     - intent: 감사
     - action: utter_감사답변
+
+- story: 답변잘못됨
+  steps:
+    - intent: 답변잘못됨
+    - action: utter_답변잘못됨
+
+- story: 상담정보
+  steps:
+    - intent: 상담정보
+    - action: utter_상담정보
 
 - story: 카테고리질문
   steps:
@@ -30,11 +36,6 @@ stories:
   - intent: 학교폭력_추천답변
   - action: utter_학교폭력_추천답변
 
-#- story: 사이버학교폭력_카테고리질문
-#  steps:
-#  - intent: 사이버학교폭력
-#  - action: utter_카테고리질문
-
 - story: 사이버학교폭력_기관
   steps:
   - intent: 사이버학교폭력_기관
@@ -45,11 +46,6 @@ stories:
   - intent: 사이버학교폭력_추천답변
   - action: utter_사이버학교폭력_추천답변
 
-#- story: 학교폭력목격_카테고리질문
-#  steps:
-#  - intent: 학교폭력목격
-#  - action: utter_카테고리질문
-
 - story: 학교폭력목격_콘텐츠
   steps:
   - intent: 학교폭력목격_콘텐츠
@@ -59,11 +55,6 @@ stories:
   steps:
   - intent: 학교폭력목격_추천답변
   - action: utter_학교폭력목격_추천답변
-#
-#- story: 가정폭력_카테고리질문
-#  steps:
-#  - intent: 가정폭력
-#  - action: utter_카테고리질문
 
 - story: 가정폭력_기관
   steps:
@@ -80,11 +71,6 @@ stories:
   - intent: 가정폭력성학대_추천답변
   - action: utter_가정폭력성학대_추천답변
 
-#- story: 자살_카테고리질문
-#  steps:
-#  - intent: 자살
-#  - action: utter_카테고리질문
-
 - story: 자살_기관
   steps:
   - intent: 자살_기관
@@ -95,11 +81,6 @@ stories:
   - intent: 자살_추천답변
   - action: utter_자살_추천답변
 
-#- story: 자해_카테고리질문
-#  steps:
-#  - intent: 자해
-#  - action: utter_카테고리질문
-
 - story: 자해_기관
   steps:
   - intent: 자해_기관
@@ -109,6 +90,11 @@ stories:
   steps:
   - intent: 자해_추천답변
   - action: utter_자해_추천답변
+
+- story: 자해_콘텐츠
+  steps:
+  - intent: 자해_콘텐츠
+  - action: utter_자해_콘텐츠
 
 - story: 성_기관
   steps:
@@ -130,10 +116,65 @@ stories:
   - intent: 대인관계_기관
   - action: utter_대인관계_기관
 
+- story: 대인관계_추천답변
+  steps:
+  - intent: 대인관계_추천답변
+  - action: utter_대인관계_추천답변
+
+- story: 대인관계_콘텐츠
+  steps:
+  - intent: 대인관계_콘텐츠
+  - action: utter_대인관계_콘텐츠
+
+- story: 여자친구_콘텐츠
+  steps:
+  - intent: 여자친구_콘텐츠
+  - action: utter_여자친구_콘텐츠
+
+- story: 남자친구_콘텐츠
+  steps:
+  - intent: 남자친구_콘텐츠
+  - action: utter_남자친구_콘텐츠
+
+- story: 시험불안_콘텐츠
+  steps:
+  - intent: 시험불안_콘텐츠
+  - action: utter_시험불안_콘텐츠
+
 - story: 진로_기관
   steps:
   - intent: 진로_기관
   - action: utter_진로_기관
+
+- story: 진로_추천답변
+  steps:
+  - intent: 진로_추천답변
+  - action: utter_진로_추천답변
+
+- story: 진로_콘텐츠
+  steps:
+  - intent: 진로_콘텐츠
+  - action: utter_진로_콘텐츠
+
+- story: 자퇴_콘텐츠
+  steps:
+  - intent: 자퇴_콘텐츠
+  - action: utter_자퇴_콘텐츠
+
+- story: 외모_콘텐츠
+  steps:
+  - intent: 외모_콘텐츠
+  - action: utter_외모_콘텐츠
+
+- story: 코로나_콘텐츠
+  steps:
+  - intent: 코로나_콘텐츠
+  - action: utter_코로나_콘텐츠
+
+- story: 게임중독_콘텐츠
+  steps:
+  - intent: 게임중독_콘텐츠
+  - action: utter_게임중독_콘텐츠
 
 - story: 인터넷중독_기관
   steps:
@@ -150,6 +191,41 @@ stories:
   - intent: 정신건강_기관
   - action: utter_정신건강_기관
 
+- story: 내향적_추천답변
+  steps:
+  - intent: 내향적_추천답변
+  - action: utter_내향적_추천답변
+
+- story: 우울_추천답변
+  steps:
+  - intent: 우울_추천답변
+  - action: utter_우울_추천답변
+
+- story: 우울_콘텐츠
+  steps:
+  - intent: 우울_콘텐츠
+  - action: utter_우울_콘텐츠
+
+- story: 불안_추천답변
+  steps:
+  - intent: 불안_추천답변
+  - action: utter_불안_추천답변
+
+- story: 불안_콘텐츠
+  steps:
+  - intent: 불안_콘텐츠
+  - action: utter_불안_콘텐츠
+
+- story: 무기력_추천답변
+  steps:
+  - intent: 무기력_추천답변
+  - action: utter_무기력_추천답변
+
+- story: 무기력_콘텐츠
+  steps:
+  - intent: 무기력_콘텐츠
+  - action: utter_무기력_콘텐츠
+
 - story: 가정문제_기관
   steps:
   - intent: 가정문제_기관
@@ -160,3 +236,7 @@ stories:
   - intent: 근로문제_기관
   - action: utter_근로문제_기관
   
+- story: 열등감_콘텐츠
+  steps:
+  - intent: 열등감_콘텐츠
+  - action: utter_열등감_콘텐츠
