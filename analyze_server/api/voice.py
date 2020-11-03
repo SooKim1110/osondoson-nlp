@@ -1,4 +1,4 @@
-# from server import app
+# from analyze_server import app
 # from flask import jsonify, Response,render_template
 # import pyaudio
 # import numpy as np

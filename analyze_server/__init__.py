@@ -7,6 +7,6 @@ app = Flask(__name__)
 def default_route():
     return Response(status=200)
 
-import server.api.sentiment
-import server.api.summary
+import analyze_server.api.sentiment
+import analyze_server.api.summary
 # import server.api.voice

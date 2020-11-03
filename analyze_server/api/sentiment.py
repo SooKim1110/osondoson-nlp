@@ -1,4 +1,4 @@
-from server import app
+from analyze_server import app
 from flask import jsonify, request
 import json
 import torch
@@ -7,11 +7,11 @@ from transformers import BertForSequenceClassification, AutoTokenizer
 from keras.preprocessing.sequence import pad_sequences
 import numpy as np
 import tensorflow as tf
-from server.module import dbModule
+from analyze_server.module import dbModule
 from pymysql.err import IntegrityError
 
 tokenizer = AutoTokenizer.from_pretrained('beomi/kcbert-base')
-model = BertForSequenceClassification.from_pretrained('server/bert_emotion.h5')
+model = BertForSequenceClassification.from_pretrained('analyze_server/bert_emotion.h5')
 label_val = ['우울', '중립', '불안', '공포', '분노', '자살', '행복']
 
 def convert_input_data(sentences):

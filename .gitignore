@@ -1,7 +1,7 @@
 .idea/
 __pycache__/
 .DS_Store
-server/bert_emotion.h5/
-server/module/
-chatbot/models
-chatbot/downloaded
+analyze_server/bert_emotion.h5/
+analyze_server/module/
+chatbot_server/models
+chatbot_server/downloaded

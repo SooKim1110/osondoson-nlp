@@ -1,4 +1,4 @@
-from server import app
+from analyze_server import app
 from flask import jsonify, request
 from konlpy.tag import Komoran
 from collections import Counter, defaultdict
@@ -6,7 +6,7 @@ from scipy.sparse import csr_matrix
 import numpy as np
 from sklearn.preprocessing import normalize
 import math
-from server.module import dbModule
+from analyze_server.module import dbModule
 from pymysql.err import IntegrityError
 import re
 
