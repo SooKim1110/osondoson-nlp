@@ -14,7 +14,15 @@ from google.colab import drive
 # 구글 드라이브에서 데이터 로드
 drive.mount('/content/drive', force_remount=True)
 
+# df = pd.read_excel("/content/drive/My Drive/Colab Notebooks/대화_연속적.xlsx")
+# df = df[['Sentence','Emotion']]
+# df = df[df['Emotion'] == '행복']
+# df.to_excel('연속적_행복.xlsx')
+
 data = pd.read_csv("/content/drive/My Drive/Colab Notebooks/crawl.csv")
+
+data = pd.read_excel("/content/drive/My Drive/Colab Notebooks/감정_문장별.xlsx")
+data
 
 import re 
 def preprocess_text(sentence):
@@ -77,24 +85,20 @@ for idx,x in enumerate(answer):
 for idx, x in enumerate(len_list):
   print(idx , " " , x)
 
-#확인용 - 지우가
-answer = []
-for sentence in data['답변']:
-  info = sentence.split('작성자')
-  info.pop(0) #첫 element 삭제
-  answer.append(info)
-
-answer[0]
-
-#answer애서 컴슬러 이름, 시간 지우기 컴슬러P (2015-09-18 01:34:00)
+#answer애서 컴슬러 이름, 시간 지우기 
 def pre_text(sentence):
-  re_pattern = r'고민상담게시판'
+  re_pattern = r'컴슬러[A-Z] \((\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})\)'
   new_text = re.sub(re_pattern, '', sentence)
-  re_pattern = r'제목'
-  new_text = re.sub(re_pattern, '', new_text)
   return new_text
 
-data.iloc[:,0] = data.iloc[:,0].apply(pre_text)
+for idx1, x in enumerate(answer):
+  for idx2, sent in enumerate(x):
+    answer[idx1][idx2] = pre_text(sent)
+
+
+answer = answer
+
+answer[0]
 
 # 데이터 분리
 title = []
@@ -111,9 +115,37 @@ for sentence in data['고민']:
   date.append(string[:10])
   text.append(string[10:])
 
-dict = {'title': title, 'user': user, 'date':date, 'text': text, 'answer': answer}
+# dict = {'title': title, 'user': user, 'date':date, 'text': text, 'answer': answer}
+# df = pd.DataFrame(dict)
+# df.to_excel("전처리_원본.xlsx")
+
+# #답변 5개씩만 (+나중에 채팅상담실에서 더 많은 이야기~ 같은 답변 제외하기)
+answer1 = []
+answer2 = []
+answer3 = []
+answer4 = []
+answer5 = []
+
+for replys in answer:
+  length = len(replys)
+  for i in range(length):
+    if (i == 0): answer1.append(replys[0])
+    if (i == 1): answer2.append(replys[1])
+    if (i == 2): answer3.append(replys[2])
+    if (i == 3): answer4.append(replys[3])
+    if (i == 4): answer5.append(replys[4])
+  while length < 5:
+    if (length == 0): answer1.append("")
+    if (length == 1): answer2.append("")
+    if (length == 2): answer3.append("")
+    if (length == 3): answer4.append("")
+    if (length == 4): answer5.append("")
+    length += 1
+
+#답변 추천용 데이터셋 생성
+dict = {'title': title, 'user': user, 'date':date, 'text': text, 'answer1': answer1,'answer2': answer2,'answer3': answer3,'answer4': answer4,'answer5': answer5}
 df = pd.DataFrame(dict)
-df
+df.to_excel("답변5개.xlsx")
 
 #korean sentence splitter(https://github.com/likejazz/korean-sentence-splitter) 사용 -> 문장 분리 
 !pip install kss
