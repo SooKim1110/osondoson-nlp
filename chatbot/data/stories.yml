@@ -11,6 +11,11 @@ stories:
     - intent: 감사
     - action: utter_감사답변
 
+- story: 이름
+  steps:
+    - intent: 이름
+    - action: utter_이름
+
 - story: 답변잘못됨
   steps:
     - intent: 답변잘못됨
