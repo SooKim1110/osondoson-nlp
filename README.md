@@ -61,13 +61,14 @@
 <p>(* 시연을 위해 오타 등을 포함한 질문을 입력하였습니다.)</p>
 </p>
 
-### +) 기타 자료 🛠️:
+## +) 기타 자료 🛠️:
 <p align="center">
   <kbd><img src="https://user-images.githubusercontent.com/47516074/114339941-67dc8300-9b91-11eb-915b-e5c9c187e3e2.png" width="700"></kbd>
    <kbd><img src="https://user-images.githubusercontent.com/47516074/114339950-6ad77380-9b91-11eb-87a6-3c6dd1b48b64.png" width="700"></kbd>
    <kbd><img src="https://user-images.githubusercontent.com/47516074/114339948-69a64680-9b91-11eb-9c07-6613b7c8d01b.png" width="700"></kbd>
 </p>
 <br/><br/>
+
 ## References
 
 - [Huggingface Transformers](https://github.com/huggingface/transformers)
