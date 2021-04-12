@@ -1,13 +1,11 @@
 # [오손도손: 또래 상담 플랫폼] 상담 분석 모델 & 상담 가이드 챗봇 
 
-<div align="center">
-  <br/><br/>
-  <img src="/uploads/057ae484d0500c30b75db919b68d885c/Screen_Shot_2020-11-04_at_6.39.38_PM.png" width="600" > <br/><br/>
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/47516074/114338766-bb010680-9b8e-11eb-8537-ae28a52cba1f.png" width="50%" height="50%"><br/><br/>
   오손도손은 청소년들이 온라인 상에서 쉽고 편하게 또래 상담을 하여 고민을 해소할 수 있도록 돕는 <b>'또래상담 플랫폼'</b>입니다. <br/><br/>
   특히, 상담 내용 음성인식을 통해 <b>청소년들의 감정을 지속적으로 파악/관리하는 상담 분석 기능</b>과 <b>문제 상황별 상담 가이드를 제공하는 챗봇 기능</b>을 통해 <br/><br/>
-  내담 학생, 또래 상담자, 담당 교사 모두가 <b>효율적이고 전문적인 상담</b>을 할 수 있도록 돕습니다.  <br/><br/>
-  <br/><br/>
-</div>
+  내담 학생, 또래 상담자, 담당 교사 모두가 <b>효율적이고 전문적인 상담</b>을 할 수 있도록 돕습니다. 
+</p>
 
 
 ## 프로젝트 디렉토리 구조 :open_file_folder:
@@ -29,9 +27,9 @@
 > - 분류된 문장들의 감정 정보를 활용하여 내담자의 우울 정도, 응급 상황 및 위험 표현 문장 파악 
 > - 훈련에 사용된 데이터셋 => 정신 건강 의미어 데이터 (AI Hub), 웰니스 대화 스크립트 데이터 (AI Hub), 1388 댓글 상담실 데이터 (크롤링)
 
-<div align="center">
-  <img src="/uploads/68ad9ffb9ec768dd2b3bc7cec0d24d3f/감정분석.png"  width="800" >
-</div>
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/47516074/114338786-c5bb9b80-9b8e-11eb-81f1-bcfa3a7cd8e4.png"  width="800" >
+</p>
 <br/><br/>
 
 ## 1-2) 주요 내용 분석 (주요 단어, 문장 추출) :memo:
@@ -47,9 +45,9 @@
 사실 궁금해서 자해를 시도하기도 했어. 내 이야기 들어줘서 고마워! 조금 괜찮아진 것 같아.
 ```
 ##### 분석 결과 
-<div align="center">
-<img src="/uploads/ef8ae78f7bbd0248df7b163a1282bb2a/Screen_Shot_2020-11-04_at_8.44.56_PM.png" width="700">
-</div>
+<p align="center">
+<img src="https://user-images.githubusercontent.com/47516074/114338770-bc323380-9b8e-11eb-8e02-9cc17617ec62.png" width="700">
+</p>
 
 <br/><br/>
 ## 2. 상담 가이드 챗봇 :speech_balloon:
@@ -58,12 +56,17 @@
 > - 머신 러닝 기반으로 학생의 질문 의도를 분류하기 때문에 오탈자나 신조어 등이 포함된 질문에도 비교적 정확하게 답을 할 수 있음 
 <br/><br/>
 ##### 상담 가이드 챗봇 사용 예시
-<div align="center">
-<img src="/uploads/fee077b3f29067f3474dc2b0a41ec681/chatbot-gif2.gif" width="700">
+<p align="center">
+<img src="https://user-images.githubusercontent.com/47516074/114339569-83935980-9b90-11eb-8e28-52c29b9423da.gif" width="700">
 <p>(* 시연을 위해 오타 등을 포함한 질문을 입력하였습니다.)</p>
-</div>
+</p>
 
-
+### +) 기타 자료 🛠️:
+<p align="center">
+  <kbd><img src="https://user-images.githubusercontent.com/47516074/114339941-67dc8300-9b91-11eb-915b-e5c9c187e3e2.png" width="700"></kbd>
+   <kbd><img src="https://user-images.githubusercontent.com/47516074/114339950-6ad77380-9b91-11eb-87a6-3c6dd1b48b64.png" width="700"></kbd>
+   <kbd><img src="https://user-images.githubusercontent.com/47516074/114339948-69a64680-9b91-11eb-9c07-6613b7c8d01b.png" width="700"></kbd>
+</p>
 <br/><br/>
 ## References
 
