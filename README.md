@@ -8,7 +8,7 @@
 </p>
 <br>
 
-* SooKim1110/김지수 => 오손도손 프로젝트와 개인적인 역할 및 경험에 대한 내용은 [project.md](https://github.com/SooKim1110/osondoson-nlp/blob/main/project.md)를 참고해주세요.
+* SooKim1110/김지수 => 오손도손 프로젝트와 개인적인 역할 및 경험에 대한 내용은 [project_sookim1110.md](https://github.com/SooKim1110/osondoson-nlp/blob/main/project_sookim1110.md)를 참고해주세요.
 
 
 ## 프로젝트 디렉토리 구조 :open_file_folder:
